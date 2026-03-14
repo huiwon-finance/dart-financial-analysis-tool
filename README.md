@@ -21,10 +21,10 @@ pip install -r requirements.txt
 streamlit run app.py
 
 ## 실행 화면
-![company_name](screenshots/1. company_name.JPG)
+![company_name](screenshots/company_name.png)
 
 ### 재무 분석 결과
-![analysis](screenshots/2. analysis.JPG)
+![analysis](screenshots/analysis.png)
 
 ### 동종기업 비교
-![comparison](screenshots/3. comparison.JPG)
+![comparison](screenshots/comparison.png)

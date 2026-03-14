@@ -21,6 +21,7 @@ pip install -r requirements.txt
 streamlit run app.py
 
 ## 실행 화면
+### 첫 화면(기업 이름 검색)
 ![company_name](screenshots/company_name.png)
 
 ### 재무 분석 결과

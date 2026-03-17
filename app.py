@@ -249,6 +249,7 @@ if st.session_state.analysis_done:
         st.caption("※ 고정자산회전율(매출/유형자산)은 finstate 본문 데이터에 '유형자산' 계정이 없어 산출하지 않았습니다. (추후 세부 계정/주석 연동 과제)")
 
     st.subheader("🤖 AI 재무 분석 결과")
+
     analysis = ""
 
     if debt_ratio < 100:
@@ -259,84 +260,81 @@ if st.session_state.analysis_done:
         analysis += "부채비율이 높아 재무 리스크 관리가 필요합니다. "
 
     if roe > 15:
-        analysis += "ROE가 높아 수익성이 뛰어난 기업입니다."
+        analysis += "ROE가 높아 수익성이 뛰어난 기업입니다. "
     elif roe > 5:
-        analysis += "ROE가 안정적인 수준으로 양호한 수익성을 보입니다."
+        analysis += "ROE가 안정적인 수준으로 양호한 수익성을 보입니다. "
     else:
-        analysis += "ROE가 낮아 수익성 개선이 필요합니다."
+        analysis += "ROE가 낮아 수익성 개선이 필요합니다. "
+
     if current_ratio >= 150:
-        analysis += " 유동비율이 높아 단기 지급능력이 양호합니다."
+        analysis += "유동비율이 높아 단기 지급능력이 양호합니다. "
     elif current_ratio >= 100:
-        analysis += " 유동비율이 100% 이상으로 단기 유동성은 안정적인 편입니다."
+        analysis += "유동비율이 100% 이상으로 단기 유동성은 안정적인 편입니다. "
     else:
-        analysis += " 유동비율이 100% 미만으로 단기 유동성 리스크를 점검할 필요가 있습니다."
+        analysis += "유동비율이 100% 미만으로 단기 유동성 리스크를 점검할 필요가 있습니다. "
+
     if asset_turnover > 1:
-        analysis += " 자산 활용 효율이 높은 기업입니다."
+        analysis += "자산 활용 효율이 높은 기업입니다. "
     elif asset_turnover > 0.5:
-        analysis += " 자산 활용은 평균적인 수준입니다."
+        analysis += "자산 활용은 평균적인 수준입니다. "
     else:
-        analysis += " 자산 활용 효율 개선이 필요합니다."
+        analysis += "자산 활용 효율 개선이 필요합니다. "
+
     if roa > 7:
-        analysis += " ROA가 높아 자산 대비 수익 창출력이 우수합니다."
+        analysis += "ROA가 높아 자산 대비 수익 창출력이 우수합니다. "
     elif roa > 3:
-        analysis += " ROA가 양호한 수준으로 자산 활용이 안정적입니다."
+        analysis += "ROA가 양호한 수준으로 자산 활용이 안정적입니다. "
     else:
-        analysis += " ROA가 낮아 자산 효율 개선 여지가 있습니다."
+        analysis += "ROA가 낮아 자산 효율 개선 여지가 있습니다. "
+
     if op_margin > 10:
-        analysis += " 영업이익률이 높아 본업 경쟁력이 우수합니다."
+        analysis += "영업이익률이 높아 본업 경쟁력이 우수합니다. "
     elif op_margin > 3:
-        analysis += " 영업이익률이 양호한 수준입니다."
+        analysis += "영업이익률이 양호한 수준입니다. "
     else:
-        analysis += " 영업이익률이 낮아 수익구조 점검이 필요합니다."
+        analysis += "영업이익률이 낮아 수익구조 점검이 필요합니다. "
+
     if interest_coverage is None:
-        analysis += " 이자비용 항목이 재무제표 본문에서 확인되지 않아 이자보상비율은 산출하지 않았습니다(주석 필요)."
+        analysis += "이자비용 항목이 재무제표 본문에서 확인되지 않아 이자보상비율은 산출하지 않았습니다(주석 필요). "
     else:
         if interest_coverage >= 5:
-            analysis += " 이자보상비율이 높아 이자 지급 여력이 충분합니다."
+            analysis += "이자보상비율이 높아 이자 지급 여력이 충분합니다. "
         elif interest_coverage >= 1.5:
-            analysis += " 이자보상비율이 보통 수준입니다."
+            analysis += "이자보상비율이 보통 수준입니다. "
         else:
-            analysis += " 이자보상비율이 낮아 이자부담 리스크가 있습니다."
+            analysis += "이자보상비율이 낮아 이자부담 리스크가 있습니다. "
 
-
-
-# 자산구성 해석
+    # 자산구성 해석
     if non_current_asset_ratio >= 50:
-        analysis += " 비유동자산 비중이 높아 설비 및 장기 투자자산 비중이 큰 구조로 해석됩니다."
+        analysis += "비유동자산 비중이 높아 설비 및 장기 투자자산 비중이 큰 구조로 해석됩니다. "
     else:
-        analysis += " 유동자산 비중이 상대적으로 높아 운전자본 중심의 자산 구조를 보입니다."
+        analysis += "유동자산 비중이 상대적으로 높아 운전자본 중심의 자산 구조를 보입니다. "
 
-name = company_name.strip()
+    # 산업 분류
+    name = company_name.strip()
 
-# 산업 분류 리스트
-semiconductor = ["삼성전자", "SK하이닉스", "DB하이텍"]
-defense = ["LIG넥스원", "한화에어로스페이스", "한국항공우주"]
-auto = ["현대자동차", "기아", "KG모빌리티"]
-logistics = ["현대글로비스", "CJ대한통운", "한진"]
-it_service = ["현대오토에버", "삼성SDS", "포스코DX"]
-auto_parts = ["현대모비스", "HL만도", "한온시스템", "현대위아"]
+    semiconductor = ["삼성전자", "SK하이닉스", "DB하이텍"]
+    defense = ["LIG넥스원", "한화에어로스페이스", "한국항공우주"]
+    auto = ["현대자동차", "기아", "KG모빌리티"]
+    logistics = ["현대글로비스", "CJ대한통운", "한진"]
+    it_service = ["현대오토에버", "삼성SDS", "포스코DX"]
+    auto_parts = ["현대모비스", "HL만도", "한온시스템", "현대위아"]
 
-analysis = ""
-
-if name in semiconductor:
-    analysis += " 반도체 산업은 대규모 설비투자가 핵심이므로 비유동자산 비중이 높은 구조가 일반적입니다."
-
-elif name in defense:
-    analysis += " 방산 산업은 장기 프로젝트 기반 사업 구조로 안정적인 수주와 설비 투자 비중이 특징입니다."
-
-elif name in auto:
-    analysis += " 자동차 산업은 생산설비와 제조 인프라 투자가 중요한 제조업 구조로 해석됩니다."
-
-elif name in auto_parts:
-    analysis += " 자동차 부품 산업은 완성차 업체와의 공급망 연계가 중요하며, 생산설비와 품질·원가 경쟁력이 핵심인 제조업 구조로 해석됩니다."
-
-elif name in logistics:
-    analysis += " 물류 산업은 운송 인프라와 운영 효율성이 중요한 산업 구조를 보입니다."
-
-elif name in it_service:
-    analysis += " IT 서비스 산업은 시스템 구축과 운영 기반 사업 구조로 안정적인 수익 구조와 인건비 중심 비용 구조가 특징입니다."
+    if name in semiconductor:
+        analysis += "반도체 산업은 대규모 설비투자가 핵심이므로 비유동자산 비중이 높은 구조가 일반적입니다."
+    elif name in defense:
+        analysis += "방산 산업은 장기 프로젝트 기반 사업 구조로 안정적인 수주와 설비 투자 비중이 특징입니다."
+    elif name in auto:
+        analysis += "자동차 산업은 생산설비와 제조 인프라 투자가 중요한 제조업 구조로 해석됩니다."
+    elif name in auto_parts:
+        analysis += "자동차 부품 산업은 완성차 업체와의 공급망 연계가 중요하며, 생산설비와 품질·원가 경쟁력이 핵심인 제조업 구조로 해석됩니다."
+    elif name in logistics:
+        analysis += "물류 산업은 운송 인프라와 운영 효율성이 중요한 산업 구조를 보입니다."
+    elif name in it_service:
+        analysis += "IT 서비스 산업은 시스템 구축과 운영 기반 사업 구조로 안정적인 수익 구조와 인건비 중심 비용 구조가 특징입니다."
 
     st.success(analysis)
+
     with st.expander("🔍 AI 분석 근거 보기"):
         st.markdown("### 1) 사용 지표 & 산식")
         st.write(f"- 부채비율 = 부채총계 / 자본총계 × 100 = {debt_ratio:.2f}%")
@@ -346,50 +344,70 @@ elif name in it_service:
         st.write(f"- 총자산회전율 = 매출액 / 자산총계 = {asset_turnover:.2f}회")
         st.write(f"- ROA = 당기순이익 / 자산총계 × 100 = {roa:.2f}%")
         st.write(f"- 이자비용 매칭 결과: {matched_interest if matched_interest else '재무제표 본문에서 미검출(주석 필요)'}")
-    
+
         st.markdown("### 2) 판정 기준")
         st.write("부채비율: <100 우수 / 100~200 적정 / ≥200 리스크")
         st.write("ROE: >15 우수 / 5~15 양호 / ≤5 개선 필요")
         st.write("유동비율: ≥150 양호 / 100~150 보통 / <100 점검 필요")
         st.write("총자산회전율: >1.0 높음 / 0.5~1.0 평균 / <0.5 개선 필요")
-        st.write("ROA: >7 우수 / 3~7 양호 / ≤3 개선 필요")  
-        st.info("고정자산회전율(매출/유형자산)은 finstate 본문 데이터에 '유형자산' 계정이 제공되지 않아 산출하지 않았습니다. (추후 세부 계정/주석 연동 과제)")
+        st.write("ROA: >7 우수 / 3~7 양호 / ≤3 개선 필요")
 
         st.markdown("### 3) 이번 결과 적용 근거")
 
-    if debt_ratio < 100:
-        st.success(f"부채비율 {debt_ratio:.2f}% → 우수")
-    elif debt_ratio < 200:
-        st.warning(f"부채비율 {debt_ratio:.2f}% → 적정")
-    else:
-        st.error(f"부채비율 {debt_ratio:.2f}% → 리스크")
+        if debt_ratio < 100:
+            st.success(f"부채비율 {debt_ratio:.2f}% → 우수")
+        elif debt_ratio < 200:
+            st.warning(f"부채비율 {debt_ratio:.2f}% → 적정")
+        else:
+            st.error(f"부채비율 {debt_ratio:.2f}% → 리스크")
 
-    if roe > 15:
-        st.success(f"ROE {roe:.2f}% → 우수")
-    elif roe > 5:
-        st.info(f"ROE {roe:.2f}% → 양호")
-    else:
-        st.warning(f"ROE {roe:.2f}% → 개선 필요")
+        if roe > 15:
+            st.success(f"ROE {roe:.2f}% → 우수")
+        elif roe > 5:
+            st.info(f"ROE {roe:.2f}% → 양호")
+        else:
+            st.warning(f"ROE {roe:.2f}% → 개선 필요")
 
-    if current_ratio >= 150:
-        st.success(f"유동비율 {current_ratio:.2f}% → 양호")
-    elif current_ratio >= 100:
-        st.info(f"유동비율 {current_ratio:.2f}% → 보통")
-    else:
-        st.warning(f"유동비율 {current_ratio:.2f}% → 점검 필요")
+        if current_ratio >= 150:
+            st.success(f"유동비율 {current_ratio:.2f}% → 양호")
+        elif current_ratio >= 100:
+            st.info(f"유동비율 {current_ratio:.2f}% → 보통")
+        else:
+            st.warning(f"유동비율 {current_ratio:.2f}% → 점검 필요")
 
-    if asset_turnover > 1:
-        st.success(f"총자산회전율 {asset_turnover:.2f}회 → 높음")
-    elif asset_turnover > 0.5:
-        st.info(f"총자산회전율 {asset_turnover:.2f}회 → 평균")
-    else:
-        st.warning(f"총자산회전율 {asset_turnover:.2f}회 → 개선 필요")
-    if roa > 7:
-        st.success(f"ROA {roa:.2f}% → 우수")
-    elif roa > 3:
-        st.info(f"ROA {roa:.2f}% → 양호")
-    else:
-        st.warning(f"ROA {roa:.2f}% → 개선 필요")
+        if asset_turnover > 1:
+            st.success(f"총자산회전율 {asset_turnover:.2f}회 → 높음")
+        elif asset_turnover > 0.5:
+            st.info(f"총자산회전율 {asset_turnover:.2f}회 → 평균")
+        else:
+            st.warning(f"총자산회전율 {asset_turnover:.2f}회 → 개선 필요")
+
+        if roa > 7:
+            st.success(f"ROA {roa:.2f}% → 우수")
+        elif roa > 3:
+            st.info(f"ROA {roa:.2f}% → 양호")
+        else:
+            st.warning(f"ROA {roa:.2f}% → 개선 필요")
+
+        if current_ratio >= 150:
+            st.success(f"유동비율 {current_ratio:.2f}% → 양호")
+        elif current_ratio >= 100:
+            st.info(f"유동비율 {current_ratio:.2f}% → 보통")
+        else:
+            st.warning(f"유동비율 {current_ratio:.2f}% → 점검 필요")
+
+        if asset_turnover > 1:
+            st.success(f"총자산회전율 {asset_turnover:.2f}회 → 높음")
+        elif asset_turnover > 0.5:
+            st.info(f"총자산회전율 {asset_turnover:.2f}회 → 평균")
+        else:
+            st.warning(f"총자산회전율 {asset_turnover:.2f}회 → 개선 필요")
+        if roa > 7:
+            st.success(f"ROA {roa:.2f}% → 우수")
+        elif roa > 3:
+            st.info(f"ROA {roa:.2f}% → 양호")
+        else:
+            st.warning(f"ROA {roa:.2f}% → 개선 필요")
 
 st.info("차입금 의존도, 이자보상비율 등은 주석 데이터를 추가로 분석해야 합니다.")
 
